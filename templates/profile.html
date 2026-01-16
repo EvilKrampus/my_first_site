@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <h1>Личный кабинет 👤</h1>
+
+    <p>Привет, <b>{{ username }}</b> 👋</p>
+
+    <br>
+
+    <a href="/">
+        <button>На главную</button>
+    </a>
+
+    <a href="/logout">
+        <button>Выйти</button>
+    </a>
+
+</body>
+</html>

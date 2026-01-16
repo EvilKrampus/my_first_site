@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Мой сайт</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <h1>Привет 👋</h1>
+    <p>Напиши что-нибудь:</p>
+
+    <form action="/result" method="post">
+        <input type="text" name="user_text" placeholder="Введи текст">
+        <br><br>
+        <button type="submit">Отправить</button>
+    </form>
+
+    <br><br>
+<a href="/login-page">
+    <button>Войти</button>
+</a>
+
+<a href="/register-page">
+    <button>Регистрация</button>
+</a>
+
+<br><br>
+<a href="/profile">
+    <button>Личный кабинет</button>
+</a>
+
+<br><br>
+<a href="/logout">
+    <button>Выйти</button>
+</a>
+
+</body>
+</html>
