@@ -49,26 +49,6 @@ def register():
     flash("Регистрация успешна! Теперь войдите.", "success")
     return redirect(url_for("login_page"))
 
-@app.route("/register", methods=["POST"])
-def register():
-    username = request.form["username"]
-    password = request.form["password"]
-
-    hashed_password = hash_password(password)
-
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute(
-        "INSERT INTO users (username, password) VALUES (?, ?)",
-        (username, hashed_password)
-    )
-    conn.commit()
-    conn.close()
-
-    flash("Регистрация успешна! Теперь войдите.", "success")
-    return redirect(url_for("login_page"))
-
-
 @app.route("/login", methods=["POST"])
 def do_login():
     username = request.form["username"]
@@ -115,3 +95,19 @@ def logout():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app
+
+from db import get_db
+
+conn = get_db()
+cursor = conn.cursor()
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS notes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user TEXT NOT NULL,
+    text TEXT NOT NULL
+)
+""")
+
+conn.commit()
+conn.close()
