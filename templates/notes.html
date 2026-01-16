@@ -1,28 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Заметки{% endblock %}
 
-{% block content %}
-<h2 class="mb-3">Мои заметки</h2>
-
-<form method="post" class="mb-4">
-  <div class="input-group">
-    <input class="form-control" name="text" placeholder="Новая заметка" required>
-    <button class="btn btn-primary">Добавить</button>
-  </div>
-</form>
-
-<ul class="list-group">
-  {% for note in notes %}
-    <li class="list-group-item d-flex justify-content-between">
-      {{ note[1] }}
-      <a href="/delete-note/{{ note[0] }}" class="btn btn-sm btn-danger">✖</a>
-    </li>
-  {% else %}
-    <li class="list-group-item text-muted">Заметок пока нет</li>
-  {% endfor %}
-</ul>
-{% endblock %}
-{% extends "base.html" %}
 {% block title %}Заметки{% endblock %}
 
 {% block content %}
