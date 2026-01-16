@@ -1,8 +1,8 @@
+from flask import Flask, render_template, request, session, flash, redirect, url_for
 from db import get_db
-
 import hashlib
+import os
 
-from flask import Flask, render_template, request, session
 import sqlite3
 
 app = Flask(__name__)
@@ -41,7 +41,9 @@ def register():
     conn.commit()
     conn.close()
 
-    return "Регистрация успешна! 🎉 <a href='/login-page'>Войти</a>"
+    flash("Регистрация успешна! Теперь войдите.", "success")
+return redirect(url_for("login_page"))
+
 
 @app.route("/login", methods=["POST"])
 def do_login():
@@ -60,10 +62,13 @@ def do_login():
     conn.close()
 
     if user:
-        session["user"] = username
-        return "Ты вошёл! 🎉 <a href='/profile'>Перейти в кабинет</a>"
-    else:
-        return "Неверный логин или пароль ❌"
+    session["user"] = username
+    flash("Добро пожаловать!", "success")
+    return redirect(url_for("profile"))
+else:
+    flash("Неверный логин или пароль", "danger")
+    return redirect(url_for("login_page"))
+
 
 @app.route("/profile")
 def profile():
@@ -73,12 +78,16 @@ def profile():
             username=session["user"]
         )
     else:
-        return "Ты не вошёл ❌ <a href='/login-page'>Войти</a>"
+    flash("Сначала войдите", "warning")
+    return redirect(url_for("login_page"))
+
 
 @app.route("/logout")
 def logout():
     session.pop("user", None)
-    return "Ты вышел 👋 <a href='/'>На главную</a>"
+    flash("Вы вышли из аккаунта", "info")
+return redirect(url_for("home"))
+
 
 import os
 

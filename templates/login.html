@@ -1,21 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Вход</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Вход{% endblock %}
 
-    <h1>Вход 🔐</h1>
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-4">
+    <h2 class="mb-3">Вход</h2>
 
-    <form action="/login" method="post">
-        <input type="text" name="username" placeholder="Логин">
-        <br><br>
-        <input type="password" name="password" placeholder="Пароль">
-        <br><br>
-        <button type="submit">Войти</button>
+    <form method="post" action="/login">
+      <div class="mb-3">
+        <input class="form-control" name="username" placeholder="Логин" required>
+      </div>
+
+      <div class="mb-3">
+        <input type="password" class="form-control" name="password" placeholder="Пароль" required>
+      </div>
+
+      <button class="btn btn-primary w-100">Войти</button>
     </form>
-
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}
