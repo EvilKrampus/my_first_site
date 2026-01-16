@@ -18,6 +18,8 @@
 
     <div>
       {% if session.get("user") %}
+      <a class="btn btn-outline-light me-2" href="/notes">Заметки</a>
+
         <a class="btn btn-outline-light me-2" href="/profile">Профиль</a>
         <a class="btn btn-danger" href="/logout">Выйти</a>
       {% else %}

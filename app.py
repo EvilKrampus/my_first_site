@@ -92,6 +92,7 @@ if __name__ == "__main__":
         debug=False,
         use_reloader=False
     )
+
 @app.route("/notes", methods=["GET", "POST"])
 def notes():
     if "user" not in session:
@@ -101,6 +102,7 @@ def notes():
     conn = get_db()
     cursor = conn.cursor()
 
+    # Добавление заметки
     if request.method == "POST":
         text = request.form["text"]
         cursor.execute(
@@ -109,16 +111,18 @@ def notes():
         )
         conn.commit()
 
+    # Получение заметок пользователя
     cursor.execute(
-        "SELECT * FROM notes WHERE user=? ORDER BY id DESC",
+        "SELECT id, text FROM notes WHERE user=? ORDER BY id DESC",
         (session["user"],)
     )
     notes = cursor.fetchall()
     conn.close()
 
     return render_template("notes.html", notes=notes)
-@app.route("/delete-note/<int:id>")
-def delete_note(id):
+
+@app.route("/delete-note/<int:note_id>")
+def delete_note(note_id):
     if "user" not in session:
         return redirect(url_for("login_page"))
 
@@ -126,7 +130,7 @@ def delete_note(id):
     cursor = conn.cursor()
     cursor.execute(
         "DELETE FROM notes WHERE id=? AND user=?",
-        (id, session["user"])
+        (note_id, session["user"])
     )
     conn.commit()
     conn.close()
