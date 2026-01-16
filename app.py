@@ -1,3 +1,5 @@
+from db import get_db
+
 import hashlib
 
 from flask import Flask, render_template, request, session
@@ -6,9 +8,6 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = "super_secret_key"
 
-
-def get_db():
-    return sqlite3.connect("database.db")
 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
@@ -83,7 +82,7 @@ def logout():
 
 import os
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
     port = int(os.environ.get("PORT", 5000))
     app.run(
         host="0.0.0.0",
