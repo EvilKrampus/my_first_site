@@ -3,14 +3,13 @@ from db import get_db
 import hashlib
 import os
 
-import sqlite3
-
 app = Flask(__name__)
 app.secret_key = "super_secret_key"
 
 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
+
 
 @app.route("/")
 def home():
@@ -21,9 +20,11 @@ def home():
 def login_page():
     return render_template("login.html")
 
+
 @app.route("/register-page")
 def register_page():
     return render_template("register.html")
+
 
 @app.route("/register", methods=["POST"])
 def register():
@@ -42,7 +43,7 @@ def register():
     conn.close()
 
     flash("Регистрация успешна! Теперь войдите.", "success")
-return redirect(url_for("login_page"))
+    return redirect(url_for("login_page"))
 
 
 @app.route("/login", methods=["POST"])
@@ -62,13 +63,12 @@ def do_login():
     conn.close()
 
     if user:
-    session["user"] = username
-    flash("Добро пожаловать!", "success")
-    return redirect(url_for("profile"))
-else:
-    flash("Неверный логин или пароль", "danger")
-    return redirect(url_for("login_page"))
-
+        session["user"] = username
+        flash("Добро пожаловать!", "success")
+        return redirect(url_for("profile"))
+    else:
+        flash("Неверный логин или пароль", "danger")
+        return redirect(url_for("login_page"))
 
 @app.route("/profile")
 def profile():
@@ -78,24 +78,17 @@ def profile():
             username=session["user"]
         )
     else:
-    flash("Сначала войдите", "warning")
-    return redirect(url_for("login_page"))
+        flash("Сначала войдите", "warning")
+        return redirect(url_for("login_page"))
 
 
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     flash("Вы вышли из аккаунта", "info")
-return redirect(url_for("home"))
+    return redirect(url_for("home"))
 
 
-import os
-
-if __name__ == "__main__": 
+if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(
-        host="0.0.0.0",
-        port=port,
-        debug=False,
-        use_reloader=False
-    )
+    app
