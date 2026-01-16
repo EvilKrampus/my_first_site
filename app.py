@@ -26,19 +26,10 @@ def register():
     username = request.form["username"]
     password = request.form["password"]
 
-    conn = get_db()
-    cursor = conn.cursor()
-
-    cursor.execute("SELECT id FROM users WHERE username=?", (username,))
-    exists = cursor.fetchone()
-
-    if exists:
-        flash("Такой логин уже существует", "warning")
-        conn.close()
-        return redirect(url_for("register_page"))
-
     hashed_password = hash_password(password)
 
+    conn = get_db()
+    cursor = conn.cursor()
     cursor.execute(
         "INSERT INTO users (username, password) VALUES (?, ?)",
         (username, hashed_password)
@@ -90,7 +81,6 @@ def logout():
     session.pop("user", None)
     flash("Вы вышли из аккаунта", "info")
     return redirect(url_for("home"))
-
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
