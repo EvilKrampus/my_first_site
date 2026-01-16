@@ -21,10 +21,33 @@ def login_page():
     return render_template("login.html")
 
 
-@app.route("/register-page")
-def register_page():
-    return render_template("register.html")
+@app.route("/register", methods=["POST"])
+def register():
+    username = request.form["username"]
+    password = request.form["password"]
 
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT id FROM users WHERE username=?", (username,))
+    exists = cursor.fetchone()
+
+    if exists:
+        flash("Такой логин уже существует", "warning")
+        conn.close()
+        return redirect(url_for("register_page"))
+
+    hashed_password = hash_password(password)
+
+    cursor.execute(
+        "INSERT INTO users (username, password) VALUES (?, ?)",
+        (username, hashed_password)
+    )
+    conn.commit()
+    conn.close()
+
+    flash("Регистрация успешна! Теперь войдите.", "success")
+    return redirect(url_for("login_page"))
 
 @app.route("/register", methods=["POST"])
 def register():
