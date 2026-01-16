@@ -94,20 +94,9 @@ def logout():
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app
-
-from db import get_db
-
-conn = get_db()
-cursor = conn.cursor()
-
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS notes (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user TEXT NOT NULL,
-    text TEXT NOT NULL
-)
-""")
-
-conn.commit()
-conn.close()
+    app.run(
+        host="0.0.0.0",
+        port=port,
+        debug=False,
+        use_reloader=False
+    )
