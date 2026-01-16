@@ -92,3 +92,43 @@ if __name__ == "__main__":
         debug=False,
         use_reloader=False
     )
+@app.route("/notes", methods=["GET", "POST"])
+def notes():
+    if "user" not in session:
+        flash("Сначала войдите", "warning")
+        return redirect(url_for("login_page"))
+
+    conn = get_db()
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+        text = request.form["text"]
+        cursor.execute(
+            "INSERT INTO notes (user, text) VALUES (?, ?)",
+            (session["user"], text)
+        )
+        conn.commit()
+
+    cursor.execute(
+        "SELECT * FROM notes WHERE user=? ORDER BY id DESC",
+        (session["user"],)
+    )
+    notes = cursor.fetchall()
+    conn.close()
+
+    return render_template("notes.html", notes=notes)
+@app.route("/delete-note/<int:id>")
+def delete_note(id):
+    if "user" not in session:
+        return redirect(url_for("login_page"))
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute(
+        "DELETE FROM notes WHERE id=? AND user=?",
+        (id, session["user"])
+    )
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("notes"))
