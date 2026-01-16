@@ -15,6 +15,9 @@ def hash_password(password):
 def home():
     return render_template("index.html")
 
+@app.route("/register-page")
+def register_page():
+    return render_template("register.html")
 
 @app.route("/login-page")
 def login_page():
@@ -74,7 +77,6 @@ def profile():
     else:
         flash("Сначала войдите", "warning")
         return redirect(url_for("login_page"))
-
 
 @app.route("/logout")
 def logout():
